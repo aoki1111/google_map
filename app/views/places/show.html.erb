@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @place.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @place.description %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @place.address %>
+</p>
+
+<p>
+  <strong>Latitude:</strong>
+  <%= @place.latitude %>
+</p>
+
+<p>
+  <strong>Longitude:</strong>
+  <%= @place.longitude %>
+</p>
+
+
+<div id="map" style='width: 100%; height: 500px;'></div>
+
+
+  <script type="text/javascript">
+    handler = Gmaps.build('Google');
+    handler.buildMap({ provider: { scrollwheel: false }, internal: {id: 'map'}}, function(){
+      markers = handler.addMarkers([
+        {
+          "lat": <%= @place.latitude %>,
+          "lng": <%= @place.longitude %>,
+		  "infowindow": '<p><%= @place.title %></p><p><%= @place.address %></p><p><%= link_to "Googleマップで見る" ,"https://maps.google.co.jp/maps?q=loc:#{@place.latitude},#{@place.longitude}&iwloc=J",target: "_blank" %></p>'
+        }
+      ]);
+      handler.bounds.extendWith(markers);
+      handler.fitMapToBounds();
+      handler.getMap().setZoom(17);
+    });
+  </script>
+
+<%= link_to 'Edit', edit_place_path(@place) %> |
+<%= link_to 'Back', places_path %>
